@@ -12,7 +12,7 @@ int main()
 
     printf("--------------------------\n");
     printf("Numero de elementos da lista: ");
-    scanf("%d", &numero_elementos);
+    scanf("%d", &numero_elementos); 
     printf("Numero de Buscas: ");
     scanf("%d", &numero_buscas);
     printf("--------------------------\n");
@@ -25,8 +25,11 @@ int main()
     }
 
     for (int j = 0; j < numero_buscas; j++){
+
         numero_comparacoes = 0;
-        int elemento_buscado = rand() % numero_elementos;
+        
+        int indice = rand() % numero_elementos;
+        int elemento_buscado = vet_dados[indice];
 
         for (int i = 0; i < numero_elementos; i++){
             numero_comparacoes++;
@@ -36,6 +39,19 @@ int main()
         }
         vet_comparacoes[j] = numero_comparacoes;
     }
+
+    // for (int j = 0; j < numero_buscas; j++){
+    //     numero_comparacoes = 0;
+    //     int elemento_buscado = rand() % numero_elementos;
+
+    //     for (int i = 0; i < numero_elementos; i++){
+    //         numero_comparacoes++;
+    //         if (vet_dados[i] == elemento_buscado){
+    //            break;
+    //         }
+    //     }
+    //     vet_comparacoes[j] = numero_comparacoes;
+    // }
 
     int soma = 0;
 
