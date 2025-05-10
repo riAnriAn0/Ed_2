@@ -16,50 +16,39 @@ void imprimir(int *vetor, int n)
 {
     for (int i = 0; i < n; i++)
     {
-        printf("%d -> ", vetor[i]);
+        printf("[%d] -> ", vetor[i]);
     }
     printf("FIM\n");
 }
 
-void trocar(int *vetor, int i, int j)
-{
-    int aux = vetor[i];
-    vetor[i] = vetor[j];
-    vetor[j] = aux;
-}
-
-int n_trocas = 0;
-int voltas = 0;
 
 void insertion_sort(int *vetor, int n)
 {
     for (int j = 1; j < n; j++)
-    {   
-        bool ordenado = true;
-        int i = j;
-        while (i > 0 && vetor[i] < vetor[i - 1])
+    {
+        int index = j;
+        int elemento_atual = vetor[j];
+
+        while (index > 0 && vetor[index - 1] > elemento_atual)
         {
-            trocar(vetor, i, i - 1);
-            ordenado = false;
-            n_trocas++;
-            i--;
+            vetor[index] = vetor[index - 1];
+            index--;
         }
-        voltas++;
-        if(ordenado) return;
-    }
+
+        vetor[index] = elemento_atual;
+
+    }   
 }
 
 int main()
 {
-    int n = 10;
-    int vetor[n];
+    int n = 20;
+    int vetor[n] = {};
 
     inicia_vetor(vetor, n);
 
     imprimir(vetor, n);
     insertion_sort(vetor, n);
     imprimir(vetor, n);
-    printf("\nNumero de trocas: %d\n", n_trocas);
-    printf("Numero de voltas: %d\n", voltas);
     return 0;
 }

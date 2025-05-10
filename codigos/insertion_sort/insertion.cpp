@@ -50,29 +50,27 @@ void imprimir(celula *head)
     }
 }
 
-void trocar(celula *i, celula *j)
-{
-    int aux = i->conteudo;
-    i->conteudo = j->conteudo;
-    j->conteudo = aux;
-}
-
 void insertion_sort(celula *head)
 {
-      if(head == NULL) return;
-    celula *lista = head->prox;
+    if (head == NULL)
+        return;
 
-    while (lista != NULL)
+    celula *aux = head;
+
+    while (aux->prox != NULL)
     {
+        int elemanto_atual = aux->prox->conteudo;
+        celula *indice = aux->prox;
 
-        celula *j = lista;
-        while (j->ant != NULL && j->conteudo < j->ant->conteudo)
+        while (indice->ant != NULL && indice->ant->conteudo >= elemanto_atual)
         {
-
-            trocar(j, j->ant);
-            j = j->ant;
+            indice->conteudo = indice->ant->conteudo;
+            indice = indice->ant;
         }
-        lista = lista->prox;
+
+        indice->conteudo = elemanto_atual;
+        
+        aux = aux->prox;
     }
 }
 
