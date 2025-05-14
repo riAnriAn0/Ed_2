@@ -62,7 +62,7 @@ void trocar(Item **lista, Item *item1, Item *item2) {
 void imprimir(Item *lista)
 {
     Item *aux = lista;
-    while (aux->prox != NULL)
+    while (aux != NULL)
     {
         printf("[%d] <-> ", aux->cont);
         aux = aux->prox;

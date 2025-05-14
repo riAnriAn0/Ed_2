@@ -112,31 +112,35 @@ void inicia_vetor(Item **lista)
     return;
 }
 
-void bubble_sort(Item **lista)
+void seletion_sort(Item **lista)
 {
-    int trocou = 1;
-    Item  *aux2 = *lista;
+    Item *i = *lista;
 
-    while (aux2->prox != NULL && trocou)
+    while (i != NULL)
     {
-        trocou = 0;
-        Item *aux = *lista;
 
-        while (aux->prox != NULL)
+        Item *menor = i;
+        Item *j = i->prox;
+
+        while (j != NULL)
         {
-            if (aux->cont > aux->prox->cont)
+            if (j->cont < menor->cont)
             {
-                trocar(lista, aux, aux->prox);
-                trocou = 1;
+                menor = j;
             }
-            else
-            {
-                aux = aux->prox;
-            }
+
+            j = j->prox;
         }
 
-        aux2 = aux2->prox;
+        if (menor != i)
+        {
+            trocar(lista, i, menor);
+            Item *temp = i;
+            i = menor;
+            menor = i;
+        }
 
+        i = i->prox;
     }
 }
 
@@ -154,7 +158,7 @@ int main()
 
     imprimir(lista);
 
-    bubble_sort(&lista);
+    seletion_sort(&lista);
     imprimir(lista);
 
     return 0;
