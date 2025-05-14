@@ -112,10 +112,12 @@ void inicia_vetor(Item **lista)
     return;
 }
 
-void sort(Item **lista)
+void bubble_sort(Item **lista)
 {
-    int trocou;
-    do
+    int trocou = 1;
+    Item  *aux2 = *lista;
+
+    while (aux2->prox != NULL && trocou)
     {
         trocou = 0;
         Item *aux = *lista;
@@ -133,7 +135,9 @@ void sort(Item **lista)
             }
         }
 
-    } while (trocou);
+        aux2 = aux2->prox;
+
+    }
 }
 
 int main()
@@ -150,7 +154,7 @@ int main()
 
     imprimir(lista);
 
-    sort(&lista);
+    bubble_sort(&lista);
     imprimir(lista);
 
     return 0;
