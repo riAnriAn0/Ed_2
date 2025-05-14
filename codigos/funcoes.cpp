@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <random>
 #include <time.h>
 
 typedef struct item
 {
-    int cont;
     struct item *prox;
     struct item *ant;
+    int cont;
 } Item;
 
 void trocar(Item **lista, Item *item1, Item *item2) {
@@ -60,85 +59,63 @@ void trocar(Item **lista, Item *item1, Item *item2) {
         *lista = item1;
 }
 
-
-void iniciar_vetor(Item **head)
+void imprimir(Item *lista)
 {
-    Item *novo_item = (Item *)malloc(sizeof(Item));
-    novo_item->ant = NULL;
-    novo_item->prox = NULL;
-    novo_item->cont = 0;
-
-    if (*head == NULL)
+    Item *aux = lista;
+    while (aux->prox != NULL)
     {
+        printf("[%d] <-> ", aux->cont);
+        aux = aux->prox;
+    }
+    printf("FIM.\n");
+}
 
-        novo_item->cont = (rand() % 100);
-        *head = novo_item;
+void inicia_vetor(Item **lista)
+{
+    Item *novo_Item = (Item *)malloc(sizeof(Item));
+    novo_Item->cont = (abs(rand()) % 50);
+    novo_Item->ant = NULL;
+    novo_Item->prox = NULL;
+
+    if (*lista == NULL)
+    {
+        *lista = novo_Item;
     }
     else
     {
+        Item *aux = *lista;
 
-        Item *aux = *head;
         while (aux->prox != NULL)
         {
             aux = aux->prox;
         }
 
-        aux->prox = novo_item;
-        novo_item->ant = aux;
-        novo_item->cont = (rand() % 100);
+        aux->prox = novo_Item;
+        novo_Item->ant = aux;
     }
     return;
-}
-
-void imprimir(Item *head)
-{
-    Item *aux = head;
-    printf("\nLISTA\n");
-    while (aux != NULL)
-    {
-        printf(" [%d] <-> ", aux->cont);
-        aux = aux->prox;
-    }
-}
-
-void insertion_sort(Item **head)
-{
-    if (*head == NULL)
-        return;
-
-    Item *aux = *head;
-
-    while (aux != NULL)
-    {
-        Item *elemanto_atual = aux->prox;
-        Item *indice = aux;
-
-        while (indice != NULL && indice->cont > elemanto_atual->cont)
-        {
-            // indice->cont = indice->ant->cont;
-            trocar(head,indice,elemanto_atual);
-            indice = indice->ant;
-        }
-
-        aux = aux->prox;
-    }
 }
 
 int main()
 {
 
-    int n = 10;
-    Item *lista = NULL;
-
     srand(time(NULL));
+
+    Item *lista_teste = NULL;
+    int n = 10;
 
     for (int i = 0; i < n; i++)
     {
-        iniciar_vetor(&lista);
+        inicia_vetor(&lista_teste);
     }
 
-    imprimir(lista);
-    insertion_sort(&lista);
-    imprimir(lista);
+    imprimir(lista_teste);
+
+    printf("%d\n", lista_teste->cont);
+    printf("%d\n", lista_teste->prox->cont);
+
+    trocar(&lista_teste, lista_teste->prox->prox->prox, lista_teste);
+
+    imprimir(lista_teste);
     return 0;
 }

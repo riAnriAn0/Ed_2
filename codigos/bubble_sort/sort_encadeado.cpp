@@ -7,15 +7,15 @@ typedef struct cel
 {
     int conteudo;
     struct cel *prox;
-} celula;
+} Item;
 
-void inicia_vetor(celula **vetor, int n)
+void inicia_vetor(Item **vetor, int n)
 {
     srand(clock());
-    celula *aux = *vetor;
+    Item *aux = *vetor;
     for (int i = 0; i < n; i++)
     {
-        celula *item = (celula *)malloc(sizeof(celula));
+        Item *item = (Item *)malloc(sizeof(Item));
         if (item = NULL)
         {
             return;
@@ -28,14 +28,13 @@ void inicia_vetor(celula **vetor, int n)
         {
             (*vetor)->prox = item;
         }
-
     }
 }
 
-void imprimir(celula *vetor, int n)
+void imprimir(Item *vetor, int n)
 {
     printf("======================\n");
-    celula *aux = vetor;
+    Item *aux = vetor;
     while (aux != NULL)
     {
         printf("Conteudo: %d\n", aux->conteudo);
@@ -45,17 +44,17 @@ void imprimir(celula *vetor, int n)
     }
 }
 
-void trocar(celula *item_1, celula *item_2)
+void trocar(Item *item_1, Item *item_2)
 {
-    celula *aux = item_1;
+    Item *aux = item_1;
     item_1 = item_2;
     item_2 = aux;
 }
 
-int bubble_sort(celula **vetor, int n)
+int bubble_sort(Item **vetor, int n)
 {
     int comparacoes = 0;
-    celula *aux = *vetor;
+    Item *aux = *vetor;
 
     for (int i = 0; i < (n - 1); i++)
     {
@@ -65,7 +64,7 @@ int bubble_sort(celula **vetor, int n)
             comparacoes++;
             if ((aux->conteudo) > (aux->prox->conteudo))
             {
-                celula *prox = aux->prox;
+                Item *prox = aux->prox;
                 trocar((aux), (aux->prox));
                 troca = true;
             }
