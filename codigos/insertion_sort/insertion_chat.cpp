@@ -106,23 +106,22 @@ void insertion_sort(Item **head)
     if (*head == NULL)
         return;
 
-    Item *aux = *head;
+    Item *current = (*head)->prox;
 
-    while (aux != NULL)
+    while (current != NULL)
     {
-        Item *elemanto_atual = aux->prox;
-        Item *indice = aux;
+        Item *next = current->prox;
+        Item *temp = current;
 
-        while (indice != NULL && indice->cont > elemanto_atual->cont)
+        while (temp->ant != NULL && temp->cont < temp->ant->cont)
         {
-            // indice->cont = indice->ant->cont;
-            trocar(head,indice,elemanto_atual);
-            indice = indice->ant;
+            trocar(head, temp->ant, temp);
         }
 
-        aux = aux->prox;
+        current = next;
     }
 }
+
 
 int main()
 {

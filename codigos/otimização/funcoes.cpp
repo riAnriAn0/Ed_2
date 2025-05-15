@@ -9,8 +9,10 @@ typedef struct item
     int cont;
 } Item;
 
-void trocar(Item **lista, Item *item1, Item *item2) {
-    if (item1 == item2) return;
+void trocar(Item **lista, Item *item1, Item *item2)
+{
+    if (item1 == item2)
+        return;
 
     Item *ant1 = item1->ant;
     Item *prox1 = item1->prox;
@@ -18,16 +20,21 @@ void trocar(Item **lista, Item *item1, Item *item2) {
     Item *prox2 = item2->prox;
 
     // Se são adjacentes
-    if (item1->prox == item2) {
+    if (item1->prox == item2)
+    {
         item1->prox = prox2;
         item1->ant = item2;
 
         item2->prox = item1;
         item2->ant = ant1;
 
-        if (ant1) ant1->prox = item2;
-        if (prox2) prox2->ant = item1;
-    } else if (item2->prox == item1) {
+        if (ant1)
+            ant1->prox = item2;
+        if (prox2)
+            prox2->ant = item1;
+    }
+    else if (item2->prox == item1)
+    {
         // item2 antes de item1
         item2->prox = prox1;
         item2->ant = item1;
@@ -35,15 +42,23 @@ void trocar(Item **lista, Item *item1, Item *item2) {
         item1->prox = item2;
         item1->ant = ant2;
 
-        if (ant2) ant2->prox = item1;
-        if (prox1) prox1->ant = item2;
-    } else {
+        if (ant2)
+            ant2->prox = item1;
+        if (prox1)
+            prox1->ant = item2;
+    }
+    else
+    {
         // troca geral
-        if (ant1) ant1->prox = item2;
-        if (prox1) prox1->ant = item2;
+        if (ant1)
+            ant1->prox = item2;
+        if (prox1)
+            prox1->ant = item2;
 
-        if (ant2) ant2->prox = item1;
-        if (prox2) prox2->ant = item1;
+        if (ant2)
+            ant2->prox = item1;
+        if (prox2)
+            prox2->ant = item1;
 
         item1->ant = ant2;
         item1->prox = prox2;

@@ -118,20 +118,13 @@ void seletion_sort(Item **lista)
 
     while (i != NULL)
     {
-
         Item *menor = i;
         Item *j = i->prox;
-
         while (j != NULL)
         {
-            if (j->cont < menor->cont)
-            {
-                menor = j;
-            }
-
+            if (j->cont < menor->cont) menor = j;          
             j = j->prox;
         }
-
         if (menor != i)
         {
             trocar(lista, i, menor);
@@ -139,7 +132,6 @@ void seletion_sort(Item **lista)
             i = menor;
             menor = i;
         }
-
         i = i->prox;
     }
 }

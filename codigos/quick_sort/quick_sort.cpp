@@ -34,7 +34,7 @@ int particao(int *vetor, int left, int right)
     int i = left - 1;
     for (int j = left; j < right; j++)
     {
-        if (vetor[j] > pivo) 
+        if (vetor[j] < pivo) 
         {
             i++;
             trocar(vetor, i, j);
