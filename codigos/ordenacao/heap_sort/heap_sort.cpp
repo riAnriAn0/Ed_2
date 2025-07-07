@@ -42,7 +42,7 @@ int filho_direito(int i)
 }
 
 void maxHeap(int *vetor, int n){
-    int i = n/2 -1; // inicia pelo ultimo elemento pai
+    int i = n/2 -1;
     for (int j = i; j >= 0; j--)
     {
         int maior = j;
@@ -60,14 +60,14 @@ void maxHeap(int *vetor, int n){
         if (maior != j)
         {
             trocar(&vetor[j], &vetor[maior]);
-            j = maior; // reinicia o loop para verificar a nova posição
+            j = maior;
         }
     }
     
 }
 
 void minHeap(int *vetor, int n){
-    int i = n/2 -1; // inicia pelo ultimo elemento pai
+    int i = n/2 -1; 
     for (int j = i; j >= 0; j--)
     {
         int menor = j;
@@ -85,21 +85,19 @@ void minHeap(int *vetor, int n){
         if (menor != j)
         {
             trocar(&vetor[j], &vetor[menor]);
-            j = menor; // reinicia o loop para verificar a nova posição
+            j = menor;
         }
     }
 }
 
 void heapSort(int *vetor, int n)
 {
-    // Construir o max heap
     maxHeap(vetor, n);
 
-    // Extrair elementos do heap
     for (int i = n - 1; i > 0; i--)
     {
-        trocar(&vetor[0], &vetor[i]); // Move o maior elemento para o final
-        maxHeap(vetor, i); // Reconstroi o max heap para os elementos restantes
+        trocar(&vetor[0], &vetor[i]); 
+        maxHeap(vetor, i); 
     }
 }
 
