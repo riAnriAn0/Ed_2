@@ -63,12 +63,6 @@ void inserir_no(No *node, No *novo_no)
     }
 }
 
-int altura(No *node)
-{
-    if (node == NULL) return 0;
-
-    return 1 + fmax(altura(node->filho_eqr), altura(node->filho_drt));
-}
 
 void imprime_arvore(No *node, int tab)
 {
@@ -179,6 +173,13 @@ void rotacao_simples_esq(No *raiz){
     
     No *pai_raiz = buscar_pai(raiz, raiz->num);
     pai_raiz->filho_drt = raiz->filho_drt;
+}
+
+int altura(No *node)
+{
+    if (node == NULL) return 0;
+
+    return 1 + fmax(altura(node->filho_eqr), altura(node->filho_drt));
 }
 
 int main()
