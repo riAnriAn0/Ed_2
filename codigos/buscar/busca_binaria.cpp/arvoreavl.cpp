@@ -1,108 +1,225 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-typedef struct Item
+#include <cmath>
+
+typedef struct node
 {
     int num;
-    struct Item *filhoEsq;
-    struct Item *filhoDir;
-} Item;
+    struct node *filho_eqr;
+    struct node *filho_drt;
+} No;
 
-typedef struct Arvore
+No *criar_no(int num)
 {
-    Item *raiz;
-    int numElementos;
-} Arvore;
+    No *novo_no = new No;
 
-Item *criarItem(int num)
-{
-    Item *novoItem = new Item;
-
-    if (novoItem == nullptr)
+    if (novo_no == NULL)
     {
         printf("Erro ao alocar memoria\n");
-        return nullptr;
+        return NULL;
     }
-
-    novoItem->num = num;
-    novoItem->filhoEsq = nullptr;
-    novoItem->filhoDir = nullptr;
-    return novoItem;
+    novo_no->num = num;
+    novo_no->filho_eqr = NULL;
+    novo_no->filho_drt = NULL;
+    return novo_no;
 }
 
-void addItem(Item *node, Item *novoItem)
+void inserir_no(No *node, No *novo_no)
 {
-    if (node == nullptr || novoItem == nullptr)
+    if (node == NULL || novo_no == NULL)
     {
-        printf("Erro ao adicionar item\n");
+        printf("Erro\n");
         return;
     }
 
-    if (node->num >= novoItem->num)
+    if (node->num == novo_no->num)
     {
-        if (node->filhoEsq == nullptr)
+        printf("Numero ja existe\n");
+        return;
+    }
+
+    if (novo_no->num <= node->num)
+    { 
+        if (node->filho_eqr == NULL)
         {
-            node->filhoEsq = novoItem;
+            node->filho_eqr = novo_no;
         }
         else
         {
-            addItem(node->filhoEsq, novoItem);
+            inserir_no(node->filho_eqr, novo_no);
         }
     }
-    else 
-    {
-        if (node->filhoDir == nullptr)
+    else
+    { 
+        if (node->filho_drt == NULL)
         {
-            node->filhoDir = novoItem;
+            node->filho_drt = novo_no;
         }
         else
         {
-            addItem(node->filhoDir, novoItem);
+            inserir_no(node->filho_drt, novo_no);
         }
     }
 }
 
-void imprimirArvore(Item *raiz, int nivel = 0)
+int altura(No *node)
 {
-    if (raiz == nullptr)
+    if (node == NULL) return 0;
+
+    return 1 + fmax(altura(node->filho_eqr), altura(node->filho_drt));
+}
+
+void imprime_arvore(No *node, int tab)
+{
+    if (node == NULL)
     {
         return;
     }
 
-    imprimirArvore(raiz->filhoEsq, nivel + 1);
-    for (int i = 0; i < nivel; i++)
+    imprime_arvore(node->filho_eqr, tab + 1);
+
+    for (int i = 0; i < tab; i++)
     {
-        printf("  ");
+        printf("    ");
     }
-    printf("%d\n", raiz->num);
-    imprimirArvore(raiz->filhoDir, nivel + 1);
+    printf("%d\n", node->num);
+
+    imprime_arvore(node->filho_drt, tab + 1);
+}
+
+No *buscar(No *node, int num)
+{
+    if (node == NULL)
+    {
+        printf("Arvore vazian\n");
+        return NULL;
+    }
+
+    if (node->num == num)
+    {
+        return node;
+    }
+    else if (num < node->num)
+    {
+        return buscar(node->filho_eqr, num);
+    }
+    else
+    {
+        return buscar(node->filho_drt, num);
+    }
+
+    return NULL;
+}
+
+No *maior(No *node)
+{
+    if (node == NULL)
+        return NULL;
+    if (node->filho_drt == NULL)
+        return node;
+    return maior(node->filho_drt);
+}
+
+No *menor(No *node)
+{
+    if (node == NULL)
+        return NULL;
+    if (node->filho_eqr == NULL)
+        return node;
+    return menor(node->filho_eqr);
+}
+
+No *buscar_pai(No *node, int num)
+{
+    if (node == NULL || node->num == num)
+        return NULL;
+
+    if (node->filho_drt->num == num)
+        return node;
+    if (node->filho_eqr->num == num)
+        return node;
+
+    if (num > node->filho_drt->num)
+    {
+        return buscar_pai(node, node->filho_drt->num);
+    }
+
+    if (num < node->filho_eqr->num)
+    {
+        return buscar_pai(node, node->filho_eqr->num);
+    }
+
+    return NULL;
+}
+
+bool eh_folha(No *node)
+{
+    if(node == NULL) return false;
+
+    if(node->filho_eqr == NULL && node->filho_drt == NULL)return true;
+}
+
+
+int qntNo(No *node)
+{
+    if (node == NULL)
+    {
+        return 0;
+    }
+    else
+    {
+        1 + qntNo(node->filho_drt) + qntNo(node->filho_eqr);
+    }
+    return 0;
+}
+
+void rotacao_simples_esq(No *raiz){
+    if(raiz == NULL) return;    
+    
+    No *pai_raiz = buscar_pai(raiz, raiz->num);
+    pai_raiz->filho_drt = raiz->filho_drt;
 }
 
 int main()
 {
-    srand(time(0));
-    Arvore arvore;
-    arvore.raiz = nullptr;
-    arvore.numElementos = 0;
-
     int n = 20;
+    No *raiz = NULL;
+
     for (int i = 0; i < n; i++)
     {
         int num = rand() % 100;
-        Item *novoItem = criarItem(num);
-        if (arvore.raiz == nullptr)
+        No *novo_no = criar_no(num);
+        if (i == 0)
         {
-            arvore.raiz = novoItem;
+            raiz = novo_no;
+            printf("Raiz: %d\n", raiz->num);
         }
         else
         {
-            addItem(arvore.raiz, novoItem);
+            inserir_no(raiz, novo_no);
         }
-        arvore.numElementos++;
     }
 
-    printf("Arvore Binaria:\n");
-    imprimirArvore(arvore.raiz);
+    imprime_arvore(raiz, 0);
+
+    No *no_buscado = buscar(raiz, 5);
+
+    printf("NO buscado: ");
+    if (no_buscado != NULL)
+    {
+        printf("%d\n", no_buscado->num);
+        printf("filiho_eqr: %d\n", no_buscado->filho_eqr ? no_buscado->filho_eqr->num : NULL);
+        printf("filiho_drt: %d\n", no_buscado->filho_drt ? no_buscado->filho_drt->num : NULL);
+    }
+    else
+    {
+        printf("Nao encontrado\n");
+    }
+
+    printf("qnt elemetos: ");
+    int qnt = qntNo(raiz);
+    printf("%d", qnt);
 
     return 0;
 }
