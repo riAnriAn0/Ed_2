@@ -32,7 +32,7 @@ void shellSort(int *vetor, int n)
 
     while (gap >= 1)
     {
-        for (int j = 0; j < n; j++)
+        for (int j = 0; j <= gap; j++)
         {
             for (int i = j; i + gap < n; i += gap)
             {
@@ -51,7 +51,7 @@ int main(int argc, char const *argv[])
 
     srand(time(NULL));
 
-    int tam = 213;
+    int tam = 5;
     int lista[tam];
 
     iniciar_vetor(lista, tam);

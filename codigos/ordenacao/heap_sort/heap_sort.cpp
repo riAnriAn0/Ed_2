@@ -104,26 +104,35 @@ void heapSort(int *vetor, int n)
 int main()
 {
     
-    srand(time(NULL));
-    int n;
+    // srand(time(NULL));
+    // int n;
     
-    printf("Digite o tamanho do vetor: ");
-    scanf("%d", &n);
-    if (n <= 0) {
-        printf("Tamanho do vetor deve ser maior que zero.\n");
-        return 1;
-    }
+    // printf("Digite o tamanho do vetor: ");
+    // scanf("%d", &n);
+    // if (n <= 0) {
+    //     printf("Tamanho do vetor deve ser maior que zero.\n");
+    //     return 1;
+    // }
     
-    int vetor[n];
+    // int vetor[n];
 
-    inicializa(vetor, n);
-    printf("Vetor inicial:");
-    imprime(vetor, n);
+    // inicializa(vetor, n);
+    // printf("Vetor inicial:");
+    // imprime(vetor, n);
 
-    heapSort(vetor, n);
+    // heapSort(vetor, n);
 
-    printf("Vetor ordenado:");
-    imprime(vetor, n);
+    // printf("Vetor ordenado:");
+    // imprime(vetor, n);
+
+    int vet[6] = {5,6,9,7,2,4};
+
+    printf("Vetor inicial: ");
+    imprime(vet, 6);
+    heapSort(vet, 6);
+    printf("Vetor ordenado: ");
+    imprime(vet, 6);
+
 
     return 0;
 }

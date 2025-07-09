@@ -6,6 +6,7 @@
 typedef struct node
 {
     int num;
+    int altura;
     struct node *filho_eqr;
     struct node *filho_drt;
 } No;
@@ -14,65 +15,52 @@ No *criar_no(int num)
 {
     No *novo_no = new No;
 
-    if (novo_no == NULL)
+    if (novo_no == nullptr)
     {
         printf("Erro ao alocar memoria\n");
-        return NULL;
+        return nullptr;
     }
     novo_no->num = num;
-    novo_no->filho_eqr = NULL;
-    novo_no->filho_drt = NULL;
+    novo_no->filho_eqr = nullptr;
+    novo_no->filho_drt = nullptr;
     return novo_no;
 }
 
 void inserir_no(No *node, No *novo_no)
 {
-    if (node == NULL || novo_no == NULL)
-    {
+    if (node == nullptr || novo_no == nullptr){
         printf("Erro\n");
         return;
     }
 
-    if (node->num == novo_no->num)
-    {
+    if (node->num == novo_no->num){
         printf("Numero ja existe\n");
         return;
     }
 
-    if (novo_no->num <= node->num)
-    { 
-        if (node->filho_eqr == NULL)
-        {
+    if (novo_no->num <= node->num){ 
+        if (node->filho_eqr == nullptr){
             node->filho_eqr = novo_no;
-        }
-        else
-        {
+        }else{
             inserir_no(node->filho_eqr, novo_no);
         }
-    }
-    else
-    { 
-        if (node->filho_drt == NULL)
-        {
+    }else{ 
+        if (node->filho_drt == nullptr){
             node->filho_drt = novo_no;
-        }
-        else
-        {
+        }else{
             inserir_no(node->filho_drt, novo_no);
         }
     }
 }
 
-int altura(No *node)
-{
-    if (node == NULL) return 0;
+int altura(No *node){
+    if (node == nullptr) return 0;
 
     return 1 + fmax(altura(node->filho_eqr), altura(node->filho_drt));
 }
 
-void imprime_arvore(No *node, int tab)
-{
-    if (node == NULL)
+void imprime_arvore(No *node, int tab){
+    if (node == nullptr)
     {
         return;
     }
@@ -88,108 +76,139 @@ void imprime_arvore(No *node, int tab)
     imprime_arvore(node->filho_drt, tab + 1);
 }
 
-No *buscar(No *node, int num)
-{
-    if (node == NULL)
-    {
+No *buscar(No *node, int num){
+    if (node == nullptr){
         printf("Arvore vazian\n");
-        return NULL;
+        return nullptr;
     }
 
-    if (node->num == num)
-    {
+    if (node->num == num){
         return node;
     }
-    else if (num < node->num)
-    {
+    else if (num < node->num){
         return buscar(node->filho_eqr, num);
     }
-    else
-    {
+    else{
         return buscar(node->filho_drt, num);
     }
 
-    return NULL;
+    return nullptr;
 }
 
 No *maior(No *node)
 {
-    if (node == NULL)
-        return NULL;
-    if (node->filho_drt == NULL)
+    if (node == nullptr)
+        return nullptr;
+    if (node->filho_drt == nullptr)
         return node;
     return maior(node->filho_drt);
 }
 
 No *menor(No *node)
 {
-    if (node == NULL)
-        return NULL;
-    if (node->filho_eqr == NULL)
+    if (node == nullptr)
+        return nullptr;
+    if (node->filho_eqr == nullptr)
         return node;
     return menor(node->filho_eqr);
 }
 
 No *buscar_pai(No *node, int num)
 {
-    if (node == NULL || node->num == num)
-        return NULL;
+    if(node == nullptr) return nullptr;
 
-    if (node->filho_drt->num == num)
-        return node;
-    if (node->filho_eqr->num == num)
-        return node;
+    if(node->filho_drt != nullptr && node->filho_drt-> num == num) return node;
+    if(node->filho_eqr != nullptr && node->filho_eqr-> num == num) return node;
 
-    if (num > node->filho_drt->num)
-    {
-        return buscar_pai(node, node->filho_drt->num);
+    if (num > node->num){
+        return buscar_pai(node->filho_drt, num);
+    }else{
+        return buscar_pai(node->filho_eqr, num);
     }
-
-    if (num < node->filho_eqr->num)
-    {
-        return buscar_pai(node, node->filho_eqr->num);
-    }
-
-    return NULL;
 }
+
 
 bool eh_folha(No *node)
 {
-    if(node == NULL) return false;
+    if(node == nullptr) return false;
 
-    if(node->filho_eqr == NULL && node->filho_drt == NULL)return true;
+    if(node->filho_eqr == nullptr && node->filho_drt == nullptr)return true;
 }
 
 
 int qntNo(No *node)
 {
-    if (node == NULL)
+    if (node == nullptr)
     {
         return 0;
     }
-    else
-    {
-        1 + qntNo(node->filho_drt) + qntNo(node->filho_eqr);
-    }
-    return 0;
+    
+    return (1 + qntNo(node->filho_drt) + qntNo(node->filho_eqr));
 }
 
-void rotacao_simples_esq(No *raiz){
-    if(raiz == NULL) return;    
-    
-    No *pai_raiz = buscar_pai(raiz, raiz->num);
-    pai_raiz->filho_drt = raiz->filho_drt;
+int fb(No *node){
+    if (node == nullptr) return NULL;
+    return (altura(node->filho_eqr) - altura(node->filho_drt));
+}
+
+void rs_esq(No **raiz, No *node) {
+    if (node == nullptr || node->filho_drt == nullptr) return;
+
+    No *filho_drt = node->filho_drt;
+    node->filho_drt = filho_drt->filho_eqr;
+    filho_drt->filho_eqr = node;
+
+    No *pai_node = buscar_pai(*raiz, node->num);
+    if (pai_node == nullptr) {
+        *raiz = filho_drt;
+    } else if (pai_node->filho_eqr == node) {
+        pai_node->filho_eqr = filho_drt;
+    } else {
+        pai_node->filho_drt = filho_drt;
+    }
+}
+
+void rs_drt(No **raiz, No *node) {
+    if (node == nullptr || node->filho_eqr == nullptr) return;
+
+    No *filho_eqr = node->filho_eqr;
+    node->filho_eqr = filho_eqr->filho_drt;
+    filho_eqr->filho_drt = node;
+
+    No *pai_node = buscar_pai(*raiz, node->num);
+    if (pai_node == nullptr) {
+        *raiz = filho_eqr;
+    } else if (pai_node->filho_drt == node) {
+        pai_node->filho_drt = filho_eqr;
+    } else {
+        pai_node->filho_eqr = filho_eqr;
+    }
 }
 
 int main()
 {
-    int n = 20;
-    No *raiz = NULL;
+    int n = 9;
+    No *raiz = nullptr;
 
+    // for (int i = 0; i < n; i++)
+    // {
+    //     int num = rand() % 100;
+    //     No *novo_no = criar_no(num);
+    //     if (i == 0)
+    //     {
+    //         raiz = novo_no;
+    //         printf("Raiz: %d\n", raiz->num);
+    //     }
+    //     else
+    //     {
+    //         inserir_no(raiz, novo_no);
+    //     }
+    // }
+
+    int numeros[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     for (int i = 0; i < n; i++)
     {
-        int num = rand() % 100;
-        No *novo_no = criar_no(num);
+        No *novo_no = criar_no(numeros[i]);
         if (i == 0)
         {
             raiz = novo_no;
@@ -201,25 +220,11 @@ int main()
         }
     }
 
+
+    printf("Arvore: \n");
     imprime_arvore(raiz, 0);
 
-    No *no_buscado = buscar(raiz, 5);
-
-    printf("NO buscado: ");
-    if (no_buscado != NULL)
-    {
-        printf("%d\n", no_buscado->num);
-        printf("filiho_eqr: %d\n", no_buscado->filho_eqr ? no_buscado->filho_eqr->num : NULL);
-        printf("filiho_drt: %d\n", no_buscado->filho_drt ? no_buscado->filho_drt->num : NULL);
-    }
-    else
-    {
-        printf("Nao encontrado\n");
-    }
-
-    printf("qnt elemetos: ");
-    int qnt = qntNo(raiz);
-    printf("%d", qnt);
-
+    printf("FB 4: %d", fb(buscar(raiz,4)));
+   
     return 0;
 }

@@ -124,48 +124,90 @@ No *menor(No *node)
 
 No *buscar_pai(No *node, int num)
 {
-    if (node == NULL || node->num == num)
-        return NULL;
+    if(node == NULL || node->num == num) return NULL;
 
-    if (node->filho_drt->num == num)
-        return node;
-    if (node->filho_eqr->num == num)
-        return node;
+    if(node->filho_drt != NULL && node->filho_drt-> num == num) return node;
+    if(node->filho_eqr != NULL && node->filho_eqr-> num == num) return node;
 
-    if (num > node->filho_drt->num)
-    {
-        return buscar_pai(node, node->filho_drt->num);
+    if (num > node->num){
+        return buscar_pai(node->filho_drt, num);
+    }else{
+        return buscar_pai(node->filho_eqr, num);
     }
-
-    if (num < node->filho_eqr->num)
-    {
-        return buscar_pai(node, node->filho_eqr->num);
-    }
-
-    return NULL;
 }
 
-int qntNo(No *node)
-{
-    if (node == NULL)
-    {
+int qntNo(No *node){
+    if (node == NULL){
         return 0;
     }
-    else
-    {
-        1 + qntNo(node->filho_drt) + qntNo(node->filho_eqr);
-    }
-    return 0;
+    return (1 + qntNo(node->filho_drt) + qntNo(node->filho_eqr));
 }
+
+bool eh_folha(No *node){
+    if(node == NULL) return false;
+
+    if(node->filho_eqr == NULL && node->filho_drt == NULL)return true;
+}
+
+
+void remover_no(No **node, int num){
+    if(*node == NULL) return;
+
+    No *pai_no = buscar_pai(*node, num);
+    No *no = buscar(*node, num);
+
+    // remover folha
+    if(eh_folha(no) && pai_no != NULL){
+        if (pai_no->filho_drt == no){
+            pai_no->filho_drt = NULL;
+        }else if (pai_no->filho_eqr == no){
+            pai_no->filho_eqr = NULL;
+        }
+    }
+
+    //remover raiz
+    if(pai_no == NULL){
+        No *menor_drt = menor((*node)->filho_drt);
+
+        if(menor_drt != NULL){
+            No *pai_menor = buscar_pai((*node), menor_drt->num);
+            pai_menor->filho_eqr = NULL;
+            menor_drt->filho_drt = (*node)->filho_drt;
+            menor_drt->filho_eqr = (*node)->filho_eqr;
+            (*node) = menor_drt;
+        }else{
+            printf("Erro: menor a direita nao encontrado!!!");
+        }
+    }
+
+    //remover nó com dois filhos
+}
+
 int main()
 {
-    int n = 20;
+    int n = 10;
     No *raiz = NULL;
 
+    // for (int i = 0; i < n; i++)
+    // {
+    //     int num = rand() % 100;
+    //     No *novo_no = criar_no(num);
+    //     if (i == 0)
+    //     {
+    //         raiz = novo_no;
+    //         printf("Raiz: %d\n", raiz->num);
+    //     }
+    //     else
+    //     {
+    //         inserir_no(raiz, novo_no);
+    //     }
+    // }
+
+    
+    int numeros[] = {5,4,7,2,3,1,6,8,10,9};
     for (int i = 0; i < n; i++)
     {
-        int num = rand() % 100;
-        No *novo_no = criar_no(num);
+        No *novo_no = criar_no(numeros[i]);
         if (i == 0)
         {
             raiz = novo_no;
@@ -179,23 +221,9 @@ int main()
 
     imprime_arvore(raiz, 0);
 
-    No *no_buscado = buscar(raiz, 5);
+    remover_no(&raiz, 5);
 
-    printf("NO buscado: ");
-    if (no_buscado != NULL)
-    {
-        printf("%d\n", no_buscado->num);
-        printf("filiho_eqr: %d\n", no_buscado->filho_eqr ? no_buscado->filho_eqr->num : NULL);
-        printf("filiho_drt: %d\n", no_buscado->filho_drt ? no_buscado->filho_drt->num : NULL);
-    }
-    else
-    {
-        printf("Nao encontrado\n");
-    }
-
-    printf("qnt elemetos: ");
-    int qnt = qntNo(raiz);
-    printf("%d", qnt);
+    imprime_arvore(raiz, 0);
 
     return 0;
 }
