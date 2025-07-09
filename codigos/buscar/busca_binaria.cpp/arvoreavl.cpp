@@ -185,6 +185,13 @@ void rs_drt(No **raiz, No *node) {
     }
 }
 
+int altura(No *node)
+{
+    if (node == NULL) return 0;
+
+    return 1 + fmax(altura(node->filho_eqr), altura(node->filho_drt));
+}
+
 int main()
 {
     int n = 9;
