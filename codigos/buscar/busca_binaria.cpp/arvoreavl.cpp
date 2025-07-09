@@ -53,11 +53,6 @@ void inserir_no(No *node, No *novo_no)
     }
 }
 
-int altura(No *node){
-    if (node == nullptr) return 0;
-
-    return 1 + fmax(altura(node->filho_eqr), altura(node->filho_drt));
-}
 
 void imprime_arvore(No *node, int tab){
     if (node == nullptr)
@@ -146,6 +141,11 @@ int qntNo(No *node)
     return (1 + qntNo(node->filho_drt) + qntNo(node->filho_eqr));
 }
 
+int altura(No *node){
+    if (node == NULL) return -1;
+    return (1 + fmax(altura(node->filho_eqr), altura(node->filho_drt)));
+}
+
 int fb(No *node){
     if (node == nullptr) return NULL;
     return (altura(node->filho_eqr) - altura(node->filho_drt));
@@ -185,12 +185,6 @@ void rs_drt(No **raiz, No *node) {
     }
 }
 
-int altura(No *node)
-{
-    if (node == NULL) return 0;
-
-    return 1 + fmax(altura(node->filho_eqr), altura(node->filho_drt));
-}
 
 int main()
 {
