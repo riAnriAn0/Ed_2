@@ -53,7 +53,6 @@ void inserir_no(No *node, No *novo_no)
     }
 }
 
-
 void imprime_arvore(No *node, int tab){
     if (node == nullptr)
     {
@@ -185,47 +184,80 @@ void rs_drt(No **raiz, No *node) {
     }
 }
 
+void balancear(No **raiz ,No *node){
+    if(node == NULL) return;
+
+    if(fb(node) == 0) return;
+
+    if(fb(node) == -1){ // sub direita maior que sub esquerda
+        rs_esq(raiz, node);
+    }
+
+    if(fb(node) == 1){ // sub esauerda maior que sub direita
+        rs_esq(raiz, node);
+    }
+    
+    if(fb(node) == 2){
+        rs_drt(raiz, node->filho_eqr);
+        rs_esq(raiz, node);
+    }
+    
+    if(fb(node) == -2){
+        rs_esq(raiz, node->filho_drt);
+        rs_drt(raiz, node);
+    }
+}
 
 int main()
 {
-    int n = 9;
+    int num;
     No *raiz = nullptr;
+    bool run = true;
 
-    // for (int i = 0; i < n; i++)
-    // {
-    //     int num = rand() % 100;
-    //     No *novo_no = criar_no(num);
-    //     if (i == 0)
-    //     {
-    //         raiz = novo_no;
-    //         printf("Raiz: %d\n", raiz->num);
-    //     }
-    //     else
-    //     {
-    //         inserir_no(raiz, novo_no);
-    //     }
-    // }
+    while (run){
+        system("cls");
+        printf("Arvore AVL\n");
+        int opcao;
+        printf("\nMenu:\n");
+        printf("1. Inserir\n");
+        printf("2. Buscar\n");
+        printf("3. Imprimir\n");
+        printf("4. Sair\n");
+        printf("Escolha uma opcao: ");
+        scanf("%d", &opcao);
 
-    int numeros[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    for (int i = 0; i < n; i++)
-    {
-        No *novo_no = criar_no(numeros[i]);
-        if (i == 0)
-        {
-            raiz = novo_no;
-            printf("Raiz: %d\n", raiz->num);
-        }
-        else
-        {
-            inserir_no(raiz, novo_no);
+        switch (opcao){
+            case 1: // Inserir
+                printf("Digite um numero para inserir: ");
+                scanf("%d", &num);
+                if (raiz == nullptr) {
+                    raiz = criar_no(num);
+                } else {
+                    inserir_no(raiz, criar_no(num));
+                }
+                break;
+            case 2: // Buscar
+                printf("Digite um numero para buscar: ");
+                scanf("%d", &num);
+                {
+                    No *resultado = buscar(raiz, num);
+                    if (resultado != nullptr) {
+                        printf("Numero %d encontrado.\n", resultado->num);
+                    } else {
+                        printf("Numero %d nao encontrado.\n", num);
+                    }
+                }
+                break;
+            case 3: // Imprimir
+                imprime_arvore(raiz, 0);
+                break;
+            case 4: // Sair
+                run = false;
+                break;
+            default:
+                printf("Opcao invalida. Tente novamente.\n");
         }
     }
-
-
-    printf("Arvore: \n");
-    imprime_arvore(raiz, 0);
-
-    printf("FB 4: %d", fb(buscar(raiz,4)));
    
     return 0;
 }
