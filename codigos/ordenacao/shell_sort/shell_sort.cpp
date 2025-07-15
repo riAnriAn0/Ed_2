@@ -34,12 +34,15 @@ void shellSort(int *vetor, int n)
     {
         for (int j = 0; j <= gap; j++)
         {
-            for (int i = j; i + gap < n; i += gap)
+            for (int i = gap; i + gap < n; i += gap)
             {
-                if (vetor[i] > vetor[i + gap])
-                {
-                    trocar(vetor, i, i + gap);
+                int atual = vetor[i];
+                int index = i;
+                while(index > 0 && vetor[index - gap] > atual){
+                    vetor[index] = vetor[index - gap];
+                    index -= gap;
                 }
+                vetor[index] = atual;
             }
         }
         gap /= 2;
